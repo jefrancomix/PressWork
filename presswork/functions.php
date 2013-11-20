@@ -2,10 +2,10 @@
 // Set up PressWork Framework information
 if(!function_exists('pw_init')):
 	function pw_init() {
-		$presswork_theme_data = get_theme_data(get_template_directory().'/style.css');
-		define('PW_THEME_NAME', $presswork_theme_data['Name']);
-		define('PW_THEME_HOMEPAGE', $presswork_theme_data['URI']);
-		define('PW_THEME_VERSION', trim($presswork_theme_data['Version']));
+   $pw_meta = wp_get_theme();
+		define('PW_THEME_NAME', $pw_meta->get('Name'));
+		define('PW_THEME_HOMEPAGE', $pw_meta->get('ThemeURI'));
+		define('PW_THEME_VERSION', trim($pw_meta->get('Version')));
 		define('PW_THEME_URL', get_template_directory_uri());
 		define('PW_THEME_FILE', 'presswork');
 		define('PW_THEME_CODE', 'pwk');
@@ -210,17 +210,17 @@ if(!function_exists('presswork_setup')) :
  *
  * @uses add_theme_support() To add support for post thumbnails and automatic feed links.
  * @uses register_nav_menus() To add support for navigation menus.
- * @uses add_custom_background() To add support for a custom background.
+ * @uses add_theme_support() To add support for a custom background.
  * @uses load_theme_textdomain() For translation/localization support.
- * @uses add_custom_image_header() To add support for a custom header.
+ * @uses add_theme_support() To add support for a custom header.
  *
  * @since PressWork 1.0
  */
 function presswork_setup() {
 	global $pw_site;
 	// This theme allows users to set a custom background
-	if(function_exists('add_custom_background')) 
-		add_custom_background();
+	if(function_exists('add_theme_support')) 
+		add_theme_support('custom-background');
 		
 	// This theme uses wp_nav_menu()
 	if(function_exists('register_nav_menu')) {
@@ -263,7 +263,7 @@ function presswork_setup() {
 	
 	// Add a way for the custom header to be styled in the admin panel that controls
 	// custom headers. See pw_admin_header_style(), below.
-	add_custom_image_header('pw_header_style', 'pw_admin_header_style');
+	add_theme_support('custom-header',array('wp-head-callback' => 'pw_header_style', 'admin-head-callback' => 'pw_admin_header_style'));
 	
 	define('NO_HEADER_TEXT', true );
 	define('HEADER_TEXTCOLOR', '');
